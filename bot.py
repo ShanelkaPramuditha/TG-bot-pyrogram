@@ -46,7 +46,7 @@ with app:
 #    app.send_chat_action(message.chat.id, "typing")
 #    message.reply_text("`Good morning...!` {}  {}".format(Emoji.RED_HEART, MENTION.format(message.chat.first_name, message.chat.id)))
 
-@app.on_message(Filters.incoming & Filters.private)
+@app.on_message(Filters.incoming & Filters.private & ~Filters.service & ~Filters.bot)
 def new_message(client, message):
     
 
@@ -73,7 +73,7 @@ Don't spam my PM`
     else:
         pass
 
-@app.on_message(Filters.incoming & Filters.private, group=1)
+@app.on_message(Filters.incoming & Filters.private & ~Filters.bot, group=1)
 def after_end_chat(client, message):
     if (search_end_chat_list(str(message.from_user.id))):
         end_chat_msg_count_dict.setdefault(message.chat.id, [0])
@@ -117,7 +117,7 @@ def if_i_reply_to_end_chat(client, message):
     else:
         pass
 
-@app.on_message(Filters.outgoing & Filters.private & ~Filters.contact, group=3)
+@app.on_message(Filters.outgoing & Filters.private & ~Filters.contact & ~Filters.bot, group=3)
 def if_i_reply(client, message):
     if not(search_contacts(str(message.chat.id))) and not(search_allow_list(str(message.chat.id))):
         #app.edit_message_text(message.chat.id, (message.message_id - 1), "{}` approved to PM!`".format(MENTION.format(message.chat.first_name, message.chat.id))) 
